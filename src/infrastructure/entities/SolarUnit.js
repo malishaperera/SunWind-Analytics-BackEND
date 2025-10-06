@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
 const SolarUnitSchema = new mongoose.Schema({
+    userId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
+        required:true,
+    },
     serialNumber:{
         type: String,
         required: true,
@@ -14,6 +19,7 @@ const SolarUnitSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+
     status:{
         type: String,
         enum: ["ACTIVE", "INACTIVE", "MAINTENANCE"],
