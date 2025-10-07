@@ -1,6 +1,7 @@
-import {EnergyGenerationRecord} from "../infrastructure/entities/EnergyGenerationRecord.js";
+import {EnergyGenerationRecord} from "../infrastructure/entities/EnergyGenerationRecord";
+import {Request,Response} from "express";
 
-export const getAllEnergyGenerationRecordsBySolarUnitId = async (req,res) =>{
+export const getAllEnergyGenerationRecordsBySolarUnitId = async (req:Request,res:Response) =>{
     try {
         const {id} = req.params;
         const energyGenerationRecords = await EnergyGenerationRecord.find({

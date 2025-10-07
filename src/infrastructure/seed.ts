@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import { SolarUnit } from "./entities/SolarUnit.js";
-import { EnergyGenerationRecord } from "./entities/EnergyGenerationRecord.js";
-import {User} from "./entities/User.js";
-import {connectDB} from "./db.js";
+import { SolarUnit } from "./entities/SolarUnit";
+import { EnergyGenerationRecord } from "./entities/EnergyGenerationRecord";
+import {User} from "./entities/User";
+import {connectDB} from "./db";
 dotenv.config();
 
 async function seed() {

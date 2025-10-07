@@ -1,6 +1,7 @@
-import {SolarUnit} from "../infrastructure/entities/SolarUnit.js";
+import {SolarUnit} from "../infrastructure/entities/SolarUnit";
+import {Request,Response} from "express";
 
-export const getAllSolarUnits = async (req,res) => {
+export const getAllSolarUnits = async (req:Request,res:Response) => {
     try {
         const solarUnits = await SolarUnit.find();
         res.status(200).json(solarUnits);
@@ -9,7 +10,7 @@ export const getAllSolarUnits = async (req,res) => {
     }
 }
 
-export const createSolarUnit = async (req,res) => {
+export const createSolarUnit = async (req:Request,res:Response) => {
     try {
         const {serialNumber,installationDate,capacity,status} = req.body;
 
@@ -27,7 +28,7 @@ export const createSolarUnit = async (req,res) => {
     }
 }
 
-export const getSolarUnitById = async (req,res) => {
+export const getSolarUnitById = async (req:Request,res:Response) => {
 
     try {
         const {id} = req.params;
@@ -41,7 +42,7 @@ export const getSolarUnitById = async (req,res) => {
     }
 }
 
-export const updateSolarUnit = async (req,res) => {
+export const updateSolarUnit = async (req:Request,res:Response) => {
 
     try {
         const {id} = req.params;
@@ -64,7 +65,7 @@ export const updateSolarUnit = async (req,res) => {
     }
 }
 
-export const deleteSolarUnit = async (req,res) => {
+export const deleteSolarUnit = async (req:Request,res:Response) => {
     try {
         const { id } = req.params;
         const solarUnit = await SolarUnit.findById(id);
