@@ -1,6 +1,6 @@
 import express from "express";
 import {
-    createSolarUnit,
+    createSolarUnit, createSolarUnitValidator,
     deleteSolarUnit,
     getAllSolarUnits,
     getSolarUnitById,
@@ -9,7 +9,7 @@ import {
 
 const solarUnitRouter = express.Router();
 
-solarUnitRouter.route("/").get(getAllSolarUnits).post(createSolarUnit);
+solarUnitRouter.route("/").get(getAllSolarUnits).post(createSolarUnitValidator,createSolarUnit);
 solarUnitRouter.route("/:id").get(getSolarUnitById).put(updateSolarUnit).delete(deleteSolarUnit);
 
 export default solarUnitRouter;

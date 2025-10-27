@@ -1,14 +1,54 @@
 import {EnergyGenerationRecord} from "../infrastructure/entities/EnergyGenerationRecord";
-import {Request,Response} from "express";
+import {NextFunction, Request, Response} from "express";
 
-export const getAllEnergyGenerationRecordsBySolarUnitId = async (req:Request,res:Response) =>{
+// export const getAllEnergyGenerationRecordsBySolarUnitId = async (req:Request,res:Response,next:NextFunction) =>{
+//     try {
+//         const energyGenerationRecords = await EnergyGenerationRecord.find({
+//             solarUnitId:req.params.id,
+//         }).sort({timestamp: -1});
+//         res.status(200).json(energyGenerationRecords);
+//     } catch (error) {
+//         next(error)
+//     }
+// }
+
+
+export const getAllEnergyGenerationRecordsBySolarUnitId = async (req:Request,res:Response,next:NextFunction) =>{
     try {
-        const {id} = req.params;
-        const energyGenerationRecords = await EnergyGenerationRecord.find({
-            solarUnitId:req.params.id,
-        });
-        res.status(200).json(energyGenerationRecords);
-    } catch (error) {
-        res.status(500).json({message:"Internal Server Error"});
+        const { id } = req.params;
+        const { groupBy } = req.query;
+
+        if(!groupBy){
+            const energyGenerationRecords = await EnergyGenerationRecord.find({
+                solarUnitId:id,
+            }).sort({timestamp: -1});
+            res.status(200).json(energyGenerationRecords);
+        }
+
+        if (groupBy == "date"){
+            const energyGenerationRecords = await EnergyGenerationRecord.aggregate([
+                {
+                    $group: {
+                        _id: {
+                            date: {
+                                $dateToString: {
+                                    format: "%Y-%m-%d", date: "$timestamp"
+                                },
+                            },
+                        },
+                        totalEnergy: {
+                            $sum: "$energyGenerated"
+                        },
+                    },
+                },
+                {
+                    $sort: {"_id.date": -1},
+                },
+            ]);
+            console.log(energyGenerationRecords);
+            res.status(200).json(energyGenerationRecords);
+        }
+    }catch (error) {
+        next(error)
     }
-}
+};
