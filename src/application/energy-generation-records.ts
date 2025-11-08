@@ -32,7 +32,7 @@ export const getAllEnergyGenerationRecordsBySolarUnitId = async (req:Request,res
             res.status(200).json(energyGenerationRecords);
         }
 
-        if (groupBy == "date"){
+        if(!limit){
             const energyGenerationRecords = await EnergyGenerationRecord.aggregate([
                 {
                     $group: {
@@ -52,13 +52,32 @@ export const getAllEnergyGenerationRecordsBySolarUnitId = async (req:Request,res
                     $sort: {"_id.date": -1},
                 },
             ]);
+            res.status(200).json(energyGenerationRecords);
+            return;
+        }
 
-            if (!limit){
-                res.status(200).json(energyGenerationRecords);
-                return;
-            }
-            res.status(200).json(energyGenerationRecords.slice(0,parseInt(limit as string)));
-
+        if (groupBy == "date"){
+            const energyGenerationRecords = await EnergyGenerationRecord.aggregate([
+                {
+                    $group: {
+                        _id: {
+                            date: {
+                                $dateToString: {
+                                    format: "%Y-%m-%d", date: "$timestamp"
+                                },
+                            },
+                        },
+                        totalEnergy: {
+                            $sum: "$energyGenerated"
+                        },
+                    },
+                },
+                {
+                    $sort: {"_id.date": -1},
+                    $limit: parseInt(limit),
+                },
+            ]);
+            res.status(200).json(energyGenerationRecords);
         }
     }catch (error) {
         next(error)
