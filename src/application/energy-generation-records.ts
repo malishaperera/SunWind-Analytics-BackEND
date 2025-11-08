@@ -1,5 +1,7 @@
 import {EnergyGenerationRecord} from "../infrastructure/entities/EnergyGenerationRecord";
 import {NextFunction, Request, Response} from "express";
+import {GetAllEnergyGenerationRecordsQueryDto} from "../domain/dto/solar-unit";
+import {ValidationError} from "../domain/errors/errors";
 
 // export const getAllEnergyGenerationRecordsBySolarUnitId = async (req:Request,res:Response,next:NextFunction) =>{
 //     try {
@@ -16,7 +18,12 @@ import {NextFunction, Request, Response} from "express";
 export const getAllEnergyGenerationRecordsBySolarUnitId = async (req:Request,res:Response,next:NextFunction) =>{
     try {
         const { id } = req.params;
-        const { groupBy } = req.query;
+        const results =GetAllEnergyGenerationRecordsQueryDto.safeParse(req.query);
+        if (!results.success){
+            throw new ValidationError(results.error.message);
+        }
+
+        const {groupBy,limit} = results.data;
 
         if(!groupBy){
             const energyGenerationRecords = await EnergyGenerationRecord.find({
@@ -45,8 +52,13 @@ export const getAllEnergyGenerationRecordsBySolarUnitId = async (req:Request,res
                     $sort: {"_id.date": -1},
                 },
             ]);
-            console.log(energyGenerationRecords);
-            res.status(200).json(energyGenerationRecords);
+
+            if (!limit){
+                res.status(200).json(energyGenerationRecords);
+                return;
+            }
+            res.status(200).json(energyGenerationRecords.slice(0,parseInt(limit as string)));
+
         }
     }catch (error) {
         next(error)
