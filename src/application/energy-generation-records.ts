@@ -32,52 +32,42 @@ export const getAllEnergyGenerationRecordsBySolarUnitId = async (req:Request,res
             res.status(200).json(energyGenerationRecords);
         }
 
-        if(!limit){
-            const energyGenerationRecords = await EnergyGenerationRecord.aggregate([
-                {
-                    $group: {
-                        _id: {
-                            date: {
-                                $dateToString: {
-                                    format: "%Y-%m-%d", date: "$timestamp"
+        if (groupBy === "date") {
+            if (!limit) {
+                const energyGenerationRecords = await EnergyGenerationRecord.aggregate([
+                    {
+                        $group: {
+                            _id: {
+                                date: {
+                                    $dateToString: {format: "%Y-%m-%d", date: "$timestamp"},
                                 },
                             },
-                        },
-                        totalEnergy: {
-                            $sum: "$energyGenerated"
+                            totalEnergy: {$sum: "$energyGenerated"},
                         },
                     },
-                },
-                {
-                    $sort: {"_id.date": -1},
-                },
-            ]);
-            res.status(200).json(energyGenerationRecords);
-            return;
-        }
+                    {
+                        $sort: {"_id.date": -1},
+                    },
+                ]);
 
-        if (groupBy == "date"){
+                res.status(200).json(energyGenerationRecords);
+            }
             const energyGenerationRecords = await EnergyGenerationRecord.aggregate([
                 {
                     $group: {
                         _id: {
                             date: {
-                                $dateToString: {
-                                    format: "%Y-%m-%d", date: "$timestamp"
-                                },
+                                $dateToString: { format: "%Y-%m-%d", date: "$timestamp" },
                             },
                         },
-                        totalEnergy: {
-                            $sum: "$energyGenerated"
-                        },
+                        totalEnergy: { $sum: "$energyGenerated" },
                     },
                 },
                 {
-                    $sort: {"_id.date": -1},
-                    $limit: parseInt(limit),
+                    $sort: { "_id.date": -1 },
                 },
             ]);
-            res.status(200).json(energyGenerationRecords);
+            res.status(200).json(energyGenerationRecords.slice(0, parseInt(limit)));
         }
     }catch (error) {
         next(error)
