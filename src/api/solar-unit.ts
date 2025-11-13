@@ -8,6 +8,7 @@ import {
 } from "../application/solar-unit";
 import {authenticationMiddleware} from "./middlewares/authentication-middleware";
 
+
 const solarUnitRouter = express.Router();
 
 solarUnitRouter.route("/").get(getAllSolarUnits).post(createSolarUnitValidator,createSolarUnit);
