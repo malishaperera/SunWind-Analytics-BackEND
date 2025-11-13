@@ -3,6 +3,8 @@ import {NextFunction, Request, Response} from "express";
 import {createSolarUnitDTO} from "../domain/dto/solar-unit";
 import { z } from "zod";
 import {NotFoundError, ValidationError} from "../domain/errors/errors";
+import {User} from "../infrastructure/entities/User";
+import {getAuth} from "@clerk/express";
 
 export const getAllSolarUnits = async (req:Request,res:Response,next:NextFunction) => {
     try {
@@ -51,6 +53,26 @@ export const getSolarUnitById = async (req:Request,res:Response,next:NextFunctio
             throw new NotFoundError("Solar unit not found")
         }
         res.status(200).json(solarUnit);
+    }catch (error) {
+        next(error);
+    }
+}
+
+export const getSolarUnitForUser = async (
+    req:Request,
+    res:Response,
+    next:NextFunction
+) => {
+    try {
+        // const {clerkUserId} = req.params;
+        const auth = getAuth(req);
+        const clerkUserId = auth.userId;
+        const user =await User.findOne({clerkUserId});
+        if (!user) {
+            throw new NotFoundError("User not found")
+        }
+        const solarUnits = await SolarUnit.find({ userId: user._id });
+        res.status(200).json(solarUnits[0]);
     }catch (error) {
         next(error);
     }

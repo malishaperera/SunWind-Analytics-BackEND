@@ -7,6 +7,7 @@ import {globalErrorHandler} from "./api/middlewares/global-error-handling-middle
 import cors from "cors";
 import webhooksRouter from "./api/webhooks/webhooks";
 import {loggerMiddleware} from "./api/middlewares/logger-middleware";
+import {clerkMiddleware} from "@clerk/express";
 
 const server = express();
 server.use(cors({origin:"http://localhost:5173"}));
@@ -14,6 +15,9 @@ server.use(cors({origin:"http://localhost:5173"}));
 server.use(loggerMiddleware);
 
 server.use("/api/webhooks", webhooksRouter);
+
+server.use(clerkMiddleware())
+
 server.use(express.json());
 
 server.use("/api/solar-units", solarUnitRouter);
