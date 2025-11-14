@@ -8,6 +8,7 @@ import cors from "cors";
 import webhooksRouter from "./api/webhooks/webhooks";
 import {loggerMiddleware} from "./api/middlewares/logger-middleware";
 import {clerkMiddleware} from "@clerk/express";
+import usersRouter from "./api/users";
 
 const server = express();
 server.use(cors({origin:"http://localhost:5173"}));
@@ -22,7 +23,7 @@ server.use(express.json());
 
 server.use("/api/solar-units", solarUnitRouter);
 server.use("/api/energy-generation-records", energyGenerationRecordRouter);
-
+server.use("/api/users", usersRouter);
 server.use(globalErrorHandler)
 
 connectDB();

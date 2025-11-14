@@ -3,18 +3,6 @@ import {NextFunction, Request, Response} from "express";
 import {GetAllEnergyGenerationRecordsQueryDto} from "../domain/dto/solar-unit";
 import {ValidationError} from "../domain/errors/errors";
 
-// export const getAllEnergyGenerationRecordsBySolarUnitId = async (req:Request,res:Response,next:NextFunction) =>{
-//     try {
-//         const energyGenerationRecords = await EnergyGenerationRecord.find({
-//             solarUnitId:req.params.id,
-//         }).sort({timestamp: -1});
-//         res.status(200).json(energyGenerationRecords);
-//     } catch (error) {
-//         next(error)
-//     }
-// }
-
-
 export const getAllEnergyGenerationRecordsBySolarUnitId = async (req:Request,res:Response,next:NextFunction) =>{
     try {
         const { id } = req.params;

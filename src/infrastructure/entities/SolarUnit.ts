@@ -22,7 +22,6 @@ const SolarUnitSchema = new mongoose.Schema({
     status:{
         type: String,
         enum: ["ACTIVE", "INACTIVE", "MAINTENANCE"],
-        default: "ACTIVE",
     },
 });
 

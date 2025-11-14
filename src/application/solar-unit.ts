@@ -34,7 +34,6 @@ export const createSolarUnit = async (req:Request,res:Response,next:NextFunction
             installationDate: new Date(data.installationDate),
             capacity: data.capacity,
             status: data.status,
-            userId: data.userId,
         };
 
         const createdSolarUnit = await SolarUnit.create(newSolarUnit);
@@ -64,7 +63,7 @@ export const getSolarUnitForUser = async (
     next:NextFunction
 ) => {
     try {
-        // const {clerkUserId} = req.params;
+        console.log("Hit /api/solar-units/me", req.method, req.path);
         const auth = getAuth(req);
         const clerkUserId = auth.userId;
         const user =await User.findOne({clerkUserId});
@@ -77,7 +76,17 @@ export const getSolarUnitForUser = async (
         next(error);
     }
 }
-
+// export const updateSolarUnitValidator = (
+//     req: Request,
+//     res: Response,
+//     next: NextFunction
+// ) => {
+//     const result = UpdateSolarUnitDto.safeParse(req.body);
+//     if (!result.success) {
+//         throw new ValidationError(result.error.message);
+//     }
+//     next();
+// };
 export const updateSolarUnit = async (req:Request,res:Response,next:NextFunction) => {
 
     try {
