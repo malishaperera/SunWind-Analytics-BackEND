@@ -3,7 +3,10 @@ import {NextFunction, Request, Response} from "express";
 import {GetAllEnergyGenerationRecordsQueryDto} from "../domain/dto/solar-unit";
 import {ValidationError} from "../domain/errors/errors";
 
-export const getAllEnergyGenerationRecordsBySolarUnitId = async (req:Request,res:Response,next:NextFunction) =>{
+export const getAllEnergyGenerationRecordsBySolarUnitId = async (
+    req:Request,
+    res:Response,
+    next:NextFunction) =>{
     try {
         const { id } = req.params;
         const results =GetAllEnergyGenerationRecordsQueryDto.safeParse(req.query);
@@ -55,9 +58,13 @@ export const getAllEnergyGenerationRecordsBySolarUnitId = async (req:Request,res
                     $sort: { "_id.date": -1 },
                 },
             ]);
-            res.status(200).json(energyGenerationRecords.slice(0, parseInt(limit)));
+            const parsedLimit = Number(limit);
+            // res.status(200).json(energyGenerationRecords.slice(0, parseInt(limit)));
+            return res.status(200).json(
+                energyGenerationRecords.slice(0, parsedLimit)
+            );
         }
     }catch (error) {
-        next(error)
+        next(error);
     }
 };

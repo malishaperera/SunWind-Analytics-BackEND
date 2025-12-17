@@ -1,6 +1,6 @@
 import {SolarUnit} from "../infrastructure/entities/SolarUnit";
 import {NextFunction, Request, Response} from "express";
-import {createSolarUnitDTO} from "../domain/dto/solar-unit";
+import {createSolarUnitDTO, UpdateSolarUnitDto} from "../domain/dto/solar-unit";
 import { z } from "zod";
 import {NotFoundError, ValidationError} from "../domain/errors/errors";
 import {User} from "../infrastructure/entities/User";
@@ -63,7 +63,6 @@ export const getSolarUnitForUser = async (
     next:NextFunction
 ) => {
     try {
-        console.log("Hit /api/solar-units/me", req.method, req.path);
         const auth = getAuth(req);
         const clerkUserId = auth.userId;
         const user =await User.findOne({clerkUserId});
@@ -76,17 +75,17 @@ export const getSolarUnitForUser = async (
         next(error);
     }
 }
-// export const updateSolarUnitValidator = (
-//     req: Request,
-//     res: Response,
-//     next: NextFunction
-// ) => {
-//     const result = UpdateSolarUnitDto.safeParse(req.body);
-//     if (!result.success) {
-//         throw new ValidationError(result.error.message);
-//     }
-//     next();
-// };
+export const updateSolarUnitValidator = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const result = UpdateSolarUnitDto.safeParse(req.body);
+    if (!result.success) {
+        throw new ValidationError(result.error.message);
+    }
+    next();
+};
 export const updateSolarUnit = async (req:Request,res:Response,next:NextFunction) => {
 
     try {

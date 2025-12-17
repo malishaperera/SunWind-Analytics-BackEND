@@ -9,6 +9,7 @@ import webhooksRouter from "./api/webhooks/webhooks";
 import {loggerMiddleware} from "./api/middlewares/logger-middleware";
 import {clerkMiddleware} from "@clerk/express";
 import usersRouter from "./api/users";
+import {initializeScheduler} from "./infrastructure/scheduler";
 
 const server = express();
 server.use(cors({origin:"http://localhost:5173"}));
@@ -27,6 +28,7 @@ server.use("/api/users", usersRouter);
 server.use(globalErrorHandler)
 
 connectDB();
+initializeScheduler();
 
 const PORT = 3000;
 server.listen(PORT,()=>{

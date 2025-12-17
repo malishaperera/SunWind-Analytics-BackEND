@@ -3,7 +3,8 @@ import { verifyWebhook } from '@clerk/express/webhooks'
 import {User} from "../../infrastructure/entities/User";
 const webhooksRouter = express.Router();
 
-webhooksRouter.post('/clerk', express.raw({ type: 'application/json' }), async (req, res) => {
+webhooksRouter.post(
+    '/clerk', express.raw({ type: 'application/json' }), async (req, res) => {
     try {
         const evt = await verifyWebhook(req)
 
