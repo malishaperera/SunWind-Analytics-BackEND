@@ -58,11 +58,11 @@ export const getAllEnergyGenerationRecordsBySolarUnitId = async (
                     $sort: { "_id.date": -1 },
                 },
             ]);
-            const parsedLimit = Number(limit);
-            // res.status(200).json(energyGenerationRecords.slice(0, parseInt(limit)));
-            return res.status(200).json(
-                energyGenerationRecords.slice(0, parsedLimit)
-            );
+            // const parsedLimit = Number(limit);
+            res.status(200).json(energyGenerationRecords.slice(0, parseInt(limit)));
+            // return res.status(200).json(
+            //     energyGenerationRecords.slice(0, parsedLimit)
+            // );
         }
     }catch (error) {
         next(error);

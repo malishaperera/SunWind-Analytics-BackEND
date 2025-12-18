@@ -28,7 +28,10 @@ export const syncEnergyGenerationRecords = async () => {
                 .sort({ timestamp: -1 });
 
             // Build URL with sinceTimestamp query parameter
-            const baseUrl = `http://localhost:8001/api/energy-generation-records/solar-unit/${solarUnit.serialNumber}`;
+            // const baseUrl = `http://localhost:8001/api/energy-generation-records/solar-unit/${solarUnit.serialNumber}`;
+            console.log()
+            const baseUrl = `https://sunwind-analytics-data-api-1.onrender.com/api/energy-generation-records/solar-unit/${solarUnit.serialNumber}`;
+
             const url = new URL(baseUrl);
 
             if (lastSyncedRecord?.timestamp) {
