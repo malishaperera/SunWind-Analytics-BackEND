@@ -66,8 +66,7 @@ export const solarUnits = [
   {
     _id: "6874ec47f6fcc3d9ed5e1161",
     userId: "user_test131",
-    serialNumber: "SU-2024-009",
-    installationDate: "2024-04-25T00:00:00.000",
+    serialNumber: "SU-2024-009",    installationDate: "2024-04-25T00:00:00.000",
     capacity: 4900,
     status: "MAINTENANCE",
   },
