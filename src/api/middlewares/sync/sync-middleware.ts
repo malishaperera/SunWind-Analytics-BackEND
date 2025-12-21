@@ -41,9 +41,8 @@ export const syncMiddleware = async (
         // Fetch latest records from data API
         const dataAPIResponse = await fetch(
             // `http://localhost: 3000/api/energy-generation-records/solar-unit/${solarUnit.serialNumber}`
-            `https://sunwind-analytics-data-api-1.onrender.com/api/energy-generation-records/solar-unit/${solarUnit.serialNumber}`
+            `${process.env.DATA_API_URL}/api/energy-generation-records/solar-unit/${solarUnit.serialNumber}`
         );
-        // const dataAPIResponse = `https://sunwind-analytics-data-api-1.onrender.com/api/energy-generation-records/solar-unit/${solarUnit.serialNumber}`;
         if (!dataAPIResponse.ok) {
             throw new Error("Failed to fetch energy generation records from data API");
         }
