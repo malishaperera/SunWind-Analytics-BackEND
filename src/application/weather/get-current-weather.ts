@@ -9,9 +9,7 @@ export const getCurrentWeather = async (
     next: NextFunction
 ) => {
     try {
-        console.log("Received request for current weather with query:", req.query);
         const result = GetCurrentWeatherQueryDto.safeParse(req.query);
-        console.log("Validation result:", result);
 
         if (!result.success) {
             throw new ValidationError(result.error.message);

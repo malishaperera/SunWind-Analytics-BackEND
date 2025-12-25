@@ -59,6 +59,7 @@ export const getAllEnergyGenerationRecordsBySolarUnitId = async (
                 },
             ]);
             const parsedLimit = Number(limit);
+            console.log(energyGenerationRecords)
             // res.status(200).json(energyGenerationRecords.slice(0, parseInt(limit)));
             return res.status(200).json(
                 energyGenerationRecords.slice(0, parsedLimit)

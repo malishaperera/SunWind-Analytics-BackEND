@@ -7,7 +7,6 @@ export const authenticationMiddleware = (
     res: Response,
     next: NextFunction
 ) => {
-    // console.log("Running authentication middleware",req);
     const auth = getAuth(req);
     console.log("Authenticated user ID:", auth.userId);
     if (!auth.userId) {

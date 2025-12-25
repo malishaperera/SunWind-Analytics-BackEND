@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 const energyGenerationRecordSchema = new mongoose.Schema({
 
     solarUnitId:{
-        type:mongoose.Schema.Types.ObjectId,
+        // type:mongoose.Schema.Types.ObjectId,
+        type: String,
         ref:"SolarUnit",
         required:true,
     },

@@ -9,6 +9,7 @@ import {getAuth} from "@clerk/express";
 export const getAllSolarUnits = async (req:Request,res:Response,next:NextFunction) => {
     try {
         const solarUnits = await SolarUnit.find();
+
         res.status(200).json(solarUnits);
     } catch (error) {
         next(error);
@@ -51,6 +52,7 @@ export const getSolarUnitById = async (req:Request,res:Response,next:NextFunctio
         if (!solarUnit) {
             throw new NotFoundError("Solar unit not found")
         }
+
         res.status(200).json(solarUnit);
     }catch (error) {
         next(error);
@@ -65,12 +67,13 @@ export const getSolarUnitForUser = async (
     try {
         const auth = getAuth(req);
         const clerkUserId = auth.userId;
-        console.log("Clerk User IDS:", clerkUserId);
         const user =await User.findOne({clerkUserId});
+        console.log(":ksskcskcks");
         if (!user) {
             throw new NotFoundError("User not found")
         }
         const solarUnits = await SolarUnit.find({ userId: user._id });
+        console.log(solarUnits);
         res.status(200).json(solarUnits[0]);
     }catch (error) {
         next(error);

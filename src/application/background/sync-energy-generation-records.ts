@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { EnergyGenerationRecord } from "../../infrastructure/entities/EnergyGenerationRecord";
 import { SolarUnit } from "../../infrastructure/entities/SolarUnit";
+import {detectAnomalies} from "../anomaly/detect-anomalies";
 
 export const DataAPIEnergyGenerationRecordDto = z.object({
     _id: z.string(),
@@ -19,6 +20,7 @@ export const syncEnergyGenerationRecords = async () => {
     try {
 
         const solarUnits = await SolarUnit.find();
+        let hasNewRecords = false;
 
         for (const solarUnit of solarUnits) {
 
@@ -59,10 +61,14 @@ export const syncEnergyGenerationRecords = async () => {
 
                 await EnergyGenerationRecord.insertMany(recordsToInsert);
                 console.log(`Synced ${recordsToInsert.length} new energy generation records`);
+                hasNewRecords = true;
             }
             else {
                 console.log("No new records to sync");
             }
+        }
+        if (hasNewRecords) {
+            await detectAnomalies();
         }
     } catch (error) {
         console.error("Sync Job error:", error);

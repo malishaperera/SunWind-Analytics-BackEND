@@ -2,6 +2,7 @@ import { EnergyGenerationRecord } from "../../infrastructure/entities/EnergyGene
 import { Anomaly } from "../../infrastructure/entities/Anomaly";
 
 export const detectAnomalies = async () => {
+    console.log("Starting anomaly detection...");
     const records = await EnergyGenerationRecord.find()
         .sort({ timestamp: -1 })
         .limit(50);
