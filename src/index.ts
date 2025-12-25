@@ -38,6 +38,7 @@ server.use("/api/energy-generation-records", energyGenerationRecordRouter);
 server.use("/api/users", usersRouter);
 server.use("/api/weather", weatherRouter);
 server.use("/api/anomalies", anomalyRouter);
+
 server.use(globalErrorHandler)
 connectDB();
 initializeScheduler();
@@ -48,6 +49,7 @@ const PORT = process.env.PORT || 3000;
 server.listen(PORT,()=>{
     console.log(`Server running on port ${PORT}`);
 })
+
 
 /* Identify the resources
 Solar Unit

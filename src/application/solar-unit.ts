@@ -68,7 +68,6 @@ export const getSolarUnitForUser = async (
         const auth = getAuth(req);
         const clerkUserId = auth.userId;
         const user =await User.findOne({clerkUserId});
-        console.log(":ksskcskcks");
         if (!user) {
             throw new NotFoundError("User not found")
         }
