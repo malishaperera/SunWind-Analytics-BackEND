@@ -12,6 +12,7 @@ import usersRouter from "./api/users";
 import {initializeScheduler} from "./infrastructure/scheduler";
 import weatherRouter from "./api/weather/weather.routes";
 import anomalyRouter from "./api/anomaly/anomaly.routes";
+import {syncEnergyGenerationRecords} from "./application/background/sync-energy-generation-records";
 
 
 const server = express();
@@ -41,9 +42,10 @@ server.use("/api/anomalies", anomalyRouter);
 
 server.use(globalErrorHandler)
 connectDB();
+// syncEnergyGenerationRecords();
 initializeScheduler();
 
-// syncEnergyGenerationRecords();
+
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT,()=>{

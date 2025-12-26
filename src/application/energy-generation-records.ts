@@ -59,13 +59,51 @@ export const getAllEnergyGenerationRecordsBySolarUnitId = async (
                 },
             ]);
             const parsedLimit = Number(limit);
-            console.log(energyGenerationRecords)
             // res.status(200).json(energyGenerationRecords.slice(0, parseInt(limit)));
             return res.status(200).json(
                 energyGenerationRecords.slice(0, parsedLimit)
             );
         }
     }catch (error) {
+        next(error);
+    }
+};
+
+
+export const getAllEnergyGenerationRecords = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const {
+            solarUnitId,
+            from,
+            to,
+            limit = "100",
+            sort = "desc",
+        } = req.query;
+
+        const query: any = {};
+
+        // 🔹 Optional: filter by solar unit
+        if (solarUnitId) {
+            query.solarUnitId = solarUnitId;
+        }
+
+        // 🔹 Optional: date range filter
+        if (from || to) {
+            query.timestamp = {};
+            if (from) query.timestamp.$gte = new Date(from as string);
+            if (to) query.timestamp.$lte = new Date(to as string);
+        }
+
+        const records = await EnergyGenerationRecord.find(query)
+            .sort({ timestamp: sort === "asc" ? 1 : -1 })
+            .limit(Number(limit));
+
+        res.json(records);
+    } catch (error) {
         next(error);
     }
 };

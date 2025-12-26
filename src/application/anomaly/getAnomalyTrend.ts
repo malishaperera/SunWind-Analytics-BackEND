@@ -74,8 +74,6 @@ export const getAnomalyTrends = async (req: Request, res: Response) => {
                 count: found ? found.count : 0,
             };
         });
-        console.log(result+"cscscs");
-
         return res.json(result);
     }
 
