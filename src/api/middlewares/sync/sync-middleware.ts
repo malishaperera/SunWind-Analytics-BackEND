@@ -45,6 +45,7 @@ export const syncMiddleware = async (
         );
         if (!dataAPIResponse.ok) {
             throw new Error("Failed to fetch energy generation records from data API");
+            console.log(Error);
         }
 
         const latestEnergyGenerationRecords = DataAPIEnergyGenerationRecordDto
