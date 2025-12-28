@@ -15,6 +15,7 @@ import anomalyRouter from "./api/anomaly/anomaly.routes";
 import  invoiceRouter from "./api/invoice/invoice.routes";
 import paymentRoutes from "./api/payment/payment.routes";
 import stripeWebhookRouter from "./api/webhooks/stripe.webhook";
+import {generateMonthlyInvoices} from "./application/background/generate-invoices";
 
 
 const server = express();
@@ -49,7 +50,10 @@ server.use("/api/invoices", invoiceRouter);
 
 
 server.use(globalErrorHandler)
-connectDB();
+// connectDB();
+connectDB().then(async () => {
+    await generateMonthlyInvoices(); // 👈 TEMP
+});
 // syncEnergyGenerationRecords();
 initializeScheduler();
 

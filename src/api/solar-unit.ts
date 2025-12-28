@@ -18,7 +18,8 @@ solarUnitRouter.route("/")
     .post(authenticationMiddleware, authorizationMiddleware,createSolarUnitValidator,createSolarUnit);
 
 solarUnitRouter.route("/me")
-    .get(authenticationMiddleware,syncMiddleware,getSolarUnitForUser);
+    .get(authenticationMiddleware,getSolarUnitForUser);
+// syncMiddleware
 
 solarUnitRouter
     .route("/:id")

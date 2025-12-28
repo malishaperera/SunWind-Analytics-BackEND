@@ -11,6 +11,8 @@ export const createCheckoutSession = async (
 ) => {
     const { invoiceId } = req.body;
 
+    console.log("Creating checkout session for invoice:", invoiceId);
+
     // 1️⃣ Invoice fetch
     const invoice = await Invoice.findById(invoiceId);
 

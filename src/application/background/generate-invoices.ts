@@ -37,7 +37,7 @@ export const generateMonthlyInvoices = async () => {
         );
 
         // 4️⃣ Skip if no energy
-        if (totalEnergy === 0) continue;
+        // if (totalEnergy === 0) continue;
 
         // 5️⃣ Create invoice
         await Invoice.create({

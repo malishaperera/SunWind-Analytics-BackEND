@@ -18,6 +18,7 @@ export const getMyInvoices = async (req: Request, res: Response) => {
         return res.status(404).json({ message: "User not found" });
     }
 
+    console.log("Fetching invoices for user:", user._id);
     // 🔹 2. Use MongoDB ObjectId
     const invoices = await Invoice.find({ userId: user._id })
         .sort({ billingPeriodEnd: -1 });
@@ -40,6 +41,7 @@ export const getInvoiceById = async (req: Request, res: Response) => {
     if (!user) {
         return res.status(404).json({ message: "User not found" });
     }
+    console.log("Fetching invoice:", id, "for user:", user._id);
 
     const invoice = await Invoice.findOne({
         _id: id,
