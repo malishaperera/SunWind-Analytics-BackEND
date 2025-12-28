@@ -13,9 +13,12 @@ import {initializeScheduler} from "./infrastructure/scheduler";
 import weatherRouter from "./api/weather/weather.routes";
 import anomalyRouter from "./api/anomaly/anomaly.routes";
 import  invoiceRouter from "./api/invoice/invoice.routes";
-import paymentRoutes from "./api/payment/payment";
-import payment_webhook from "./api/webhooks/payment-webooks";
+import paymentRoutes from "./api/payment/payment.routes";
+import stripeWebhookRouter from "./api/webhooks/stripe.webhook";
+
+
 const server = express();
+
 server.use(
     cors({
         origin: [
@@ -28,11 +31,10 @@ server.use(
 
 server.use(loggerMiddleware);
 
+server.use("/api/stripe/webhook", stripeWebhookRouter);
 server.use("/api/webhooks", webhooksRouter);
-server.use("/api/webhooks/pay", payment_webhook);
+
 server.use(clerkMiddleware())
-
-
 server.use(express.json());
 
 server.use("/api/solar-units", solarUnitRouter);
@@ -40,8 +42,9 @@ server.use("/api/energy-generation-records", energyGenerationRecordRouter);
 server.use("/api/users", usersRouter);
 server.use("/api/weather", weatherRouter);
 server.use("/api/anomalies", anomalyRouter);
-server.use("/api/invoices", invoiceRouter);
+
 server.use("/api/payments", paymentRoutes);
+server.use("/api/invoices", invoiceRouter);
 
 
 

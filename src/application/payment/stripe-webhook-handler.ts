@@ -4,15 +4,8 @@ import { Invoice } from "../../infrastructure/entities/Invoice";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-export const stripeWebhookHandler = async (
-    req: Request,
-    res: Response
-) => {
-    const sig = req.headers["stripe-signature"];
-
-    if (!sig) {
-        return res.status(400).send("Missing Stripe signature");
-    }
+export const stripeWebhookHandler = async (req: Request, res: Response) => {
+    const sig = req.headers["stripe-signature"] as string;
 
     let event: Stripe.Event;
 
@@ -23,22 +16,19 @@ export const stripeWebhookHandler = async (
             process.env.STRIPE_WEBHOOK_SECRET!
         );
     } catch (err: any) {
-        console.error("❌ Webhook signature verification failed:", err.message);
+        console.error("Stripe webhook error:", err.message);
         return res.status(400).send(`Webhook Error: ${err.message}`);
     }
 
-    // ✅ Payment success event
     if (event.type === "checkout.session.completed") {
         const session = event.data.object as Stripe.Checkout.Session;
-
         const invoiceId = session.metadata?.invoiceId;
 
-        if (invoiceId) {
+        if (invoiceId && session.payment_status === "paid") {
             await Invoice.findByIdAndUpdate(invoiceId, {
                 paymentStatus: "PAID",
+                paidAt: new Date(),
             });
-
-            console.log("✅ Invoice marked as PAID:", invoiceId);
         }
     }
 
