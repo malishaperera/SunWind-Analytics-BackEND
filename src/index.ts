@@ -52,11 +52,10 @@ server.use("/api/invoices", invoiceRouter);
 server.use(globalErrorHandler)
 // connectDB();
 connectDB().then(async () => {
-    await generateMonthlyInvoices(); // 👈 TEMP
+    await generateMonthlyInvoices();
 });
 // syncEnergyGenerationRecords();
 initializeScheduler();
-
 
 
 const PORT = process.env.PORT || 3000;
