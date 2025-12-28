@@ -45,8 +45,9 @@ export const createCheckoutSession = async (
 
     // 3️⃣ Send client secret
     res.json({
-        clientSecret: session.client_secret,
+        sessionId: session.id,
     });
+
 };
 
 export default stripe;
