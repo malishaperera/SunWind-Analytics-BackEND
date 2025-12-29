@@ -19,7 +19,6 @@ import {generateMonthlyInvoices} from "./application/background/generate-invoice
 
 
 const server = express();
-
 server.use(
     cors({
         origin: [
@@ -29,7 +28,6 @@ server.use(
         credentials: true,
     })
 );
-
 server.use(loggerMiddleware);
 
 server.use("/api/stripe/webhook", stripeWebhookRouter);
@@ -39,24 +37,22 @@ server.use(clerkMiddleware())
 server.use(express.json());
 
 server.use("/api/solar-units", solarUnitRouter);
+
 server.use("/api/energy-generation-records", energyGenerationRecordRouter);
+
 server.use("/api/users", usersRouter);
+
 server.use("/api/weather", weatherRouter);
+
 server.use("/api/anomalies", anomalyRouter);
 
 server.use("/api/payments", paymentRoutes);
+
 server.use("/api/invoices", invoiceRouter);
 
-
-
 server.use(globalErrorHandler)
-// connectDB();
-connectDB().then(async () => {
-    await generateMonthlyInvoices();
-});
-// syncEnergyGenerationRecords();
+connectDB();
 initializeScheduler();
-
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT,()=>{

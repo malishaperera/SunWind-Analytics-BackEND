@@ -46,12 +46,7 @@ export const initializeScheduler = () => {
                     error
                 );
             }
-        },
-        {
-            timezone: "Asia/Colombo",
-        }
-    );
-
+        });
     // 🧾 Monthly Invoice Generation
     const invoiceSchedule =
         process.env.INVOICE_CRON_SCHEDULE || "1 0 1 * *";

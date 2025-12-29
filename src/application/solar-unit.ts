@@ -76,7 +76,8 @@ export const getSolarUnitForUser = async (
     }catch (error) {
         next(error);
     }
-}
+}//get the relevant solar unit for the logged in user
+
 export const updateSolarUnitValidator = (
     req: Request,
     res: Response,

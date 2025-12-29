@@ -24,6 +24,11 @@ const SolarUnitSchema = new mongoose.Schema({
         required: true,
         enum: ["ACTIVE", "INACTIVE", "MAINTENANCE"],
     },
+
+    lastSyncedAt: {
+        type: Date,
+        default: null,
+    },
 });
 
 export const SolarUnit = mongoose.model("SolarUnit", SolarUnitSchema);
