@@ -30,25 +30,21 @@ server.use(
 );
 server.use(loggerMiddleware);
 
-server.use("/api/stripe/webhook", stripeWebhookRouter);
-server.use("/api/webhooks", webhooksRouter);
-
+// server.use("/api/stripe/webhook", stripeWebhookRouter);
+// server.use("/api/webhooks", webhooksRouter);
+server.use("/api/weather", weatherRouter);
 server.use(clerkMiddleware())
 server.use(express.json());
 
 server.use("/api/solar-units", solarUnitRouter);
-
 server.use("/api/energy-generation-records", energyGenerationRecordRouter);
-
 server.use("/api/users", usersRouter);
 
-server.use("/api/weather", weatherRouter);
 
 server.use("/api/anomalies", anomalyRouter);
 
-server.use("/api/payments", paymentRoutes);
-
-server.use("/api/invoices", invoiceRouter);
+// server.use("/api/payments", paymentRoutes);
+// server.use("/api/invoices", invoiceRouter);
 
 server.use(globalErrorHandler)
 connectDB();

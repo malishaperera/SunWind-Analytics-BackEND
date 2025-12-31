@@ -3,7 +3,6 @@ import { getAnomalies } from "../../application/anomaly/get-anomalies";
 import { authenticationMiddleware } from "../middlewares/authentication-middleware";
 import {detectAnomalies} from "../../application/anomaly/detect-anomalies";
 import {getAnomalyTrends} from "../../application/anomaly/getAnomalyTrend";
-;
 
 const router = express.Router();
 

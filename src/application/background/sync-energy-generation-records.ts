@@ -18,6 +18,7 @@ export const DataAPIEnergyGenerationRecordDto = z.object({
  */
 export const syncEnergyGenerationRecords = async () => {
     try {
+        console.log("Starting energy generation records sync...");
 
         const solarUnits = await SolarUnit.find();
         let hasNewRecords = false;

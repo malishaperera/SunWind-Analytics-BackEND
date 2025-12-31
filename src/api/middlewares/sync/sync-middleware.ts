@@ -106,6 +106,7 @@ export const syncMiddleware = async (
     next: NextFunction
 ) => {
     try {
+        console.log("Starting sync middleware...");
         const auth = getAuth(req);
         if (!auth.userId) return next();
 
@@ -138,7 +139,7 @@ export const syncMiddleware = async (
             );
         }
 
-        // ⏱ Timeout protection
+        //Timeout protection
         const controller = new AbortController();
         setTimeout(() => controller.abort(), 5000);
 
