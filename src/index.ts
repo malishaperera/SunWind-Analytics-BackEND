@@ -22,6 +22,7 @@ server.use(
         origin: [
             "http://localhost:5173",
             "https://sunwind-analytics-frontend.netlify.app",
+
         ],
         credentials: true,
     })
