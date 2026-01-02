@@ -19,6 +19,7 @@ export const detectAnomalies = async () => {
                 type: "ZERO_OUTPUT",
                 severity: "HIGH",
                 description: "No energy generated during daylight hours",
+                sourceTimestamp: record.timestamp,
             });
         }
 

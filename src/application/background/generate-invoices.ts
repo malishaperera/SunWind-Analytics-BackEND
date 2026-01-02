@@ -3,52 +3,70 @@ import { EnergyGenerationRecord } from "../../infrastructure/entities/EnergyGene
 import { Invoice } from "../../infrastructure/entities/Invoice";
 
 export const generateMonthlyInvoices = async () => {
-    console.log("📄 Starting invoice generation...");
+    console.log("🧾 Running monthly invoice generation...");
 
-    const solarUnits = await SolarUnit.find();
+    //Get all ACTIVE solar units
+    const solarUnits = await SolarUnit.find({ status: "ACTIVE" });
 
     for (const unit of solarUnits) {
-        // 1️⃣ Find last invoice
+        //Find last invoice for this solar unit
         const lastInvoice = await Invoice.findOne({
             solarUnitId: unit._id,
         }).sort({ billingPeriodEnd: -1 });
 
-        // 2️⃣ Determine billing period
-        const periodStart = lastInvoice
-            ? new Date(lastInvoice.billingPeriodEnd)
-            : new Date(unit.installationDate);
+        let billingStart: Date;
 
+        if (lastInvoice) {
+            billingStart = new Date(lastInvoice.billingPeriodEnd);
+        } else {
+            billingStart = new Date(unit.installationDate);
+        }
 
-        const periodEnd = new Date(periodStart);
-        periodEnd.setMonth(periodEnd.getMonth() + 1);
+        //Calculate billing end (1 month)
+        const billingEnd = new Date(billingStart);
+        billingEnd.setMonth(billingEnd.getMonth() + 1);
 
-        // 3️⃣ Sum energy generated
-        const records = await EnergyGenerationRecord.find({
-            solarUnitId: unit._id,
-            timestamp: {
-                $gte: periodStart,
-                $lt: periodEnd,
+        //Do not generate future invoices
+        if (billingEnd > new Date()) {
+            continue;
+        }
+
+        //Sum energy generated in this period
+        const energyResult = await EnergyGenerationRecord.aggregate([
+            {
+                $match: {
+                    solarUnitId: unit._id,
+                    timestamp: {
+                        $gte: billingStart,
+                        $lt: billingEnd,
+                    },
+                },
             },
-        });
+            {
+                $group: {
+                    _id: null,
+                    totalEnergy: { $sum: "$energyGenerated" },
+                },
+            },
+        ]);
 
-        const totalEnergy = records.reduce(
-            (sum, r) => sum + r.energyGenerated,
-            0
-        );
+        const totalEnergyGenerated =
+            energyResult.length > 0 ? energyResult[0].totalEnergy : 0;
 
-        // 4️⃣ Skip if no energy
-        // if (totalEnergy === 0) continue;
-
-        // 5️⃣ Create invoice
+        //Create invoice
         await Invoice.create({
             userId: unit.userId,
             solarUnitId: unit._id,
-            billingPeriodStart: periodStart,
-            billingPeriodEnd: periodEnd,
-            totalEnergyGenerated: Math.round(totalEnergy),
+            billingPeriodStart: billingStart,
+            billingPeriodEnd: billingEnd,
+            totalEnergyGenerated,
             paymentStatus: "PENDING",
         });
 
-        console.log(`✅ Invoice created for SolarUnit ${unit._id}`);
+        console.log(
+            `✅ Invoice created for unit ${unit.serialNumber} | ${billingStart.toDateString()} → ${billingEnd.toDateString()}`
+        );
     }
+
+    console.log("🧾 Invoice generation completed");
 };
