@@ -21,14 +21,13 @@ server.use(
     cors({
         origin: [
             "http://localhost:5173",
-            "https://sunwind-analytics-frontend.netlify.app",
             "https://sunwind-analytics-frontends.netlify.app/",
 
         ],
         credentials: true,
     })
 );
-
+// "https://sunwind-analytics-frontend.netlify.app",
 server.use(loggerMiddleware);
 
 server.post(
