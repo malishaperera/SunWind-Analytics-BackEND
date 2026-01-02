@@ -1,20 +1,6 @@
 import { Request, Response } from "express";
 import { Anomaly } from "../../infrastructure/entities/Anomaly";
 
-const getWeekNumber = (date: Date): number => {
-    const temp = new Date(Date.UTC(
-        date.getFullYear(),
-        date.getMonth(),
-        date.getDate()
-    ));
-
-    const day = temp.getUTCDay() || 7;
-    temp.setUTCDate(temp.getUTCDate() + 4 - day);
-
-    const yearStart = new Date(Date.UTC(temp.getUTCFullYear(), 0, 1));
-    return Math.ceil((((temp.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
-};
-
 export const getAnomalyTrends = async (req: Request, res: Response) => {
     const { range = "hourly" } = req.query;
     const now = new Date();
@@ -44,6 +30,7 @@ export const getAnomalyTrends = async (req: Request, res: Response) => {
         return res.json(result);
     }
 
+       // (LAST 7 DAYS)
     if (range === "daily") {
         const start = new Date();
         start.setDate(start.getDate() - 6);
@@ -74,33 +61,38 @@ export const getAnomalyTrends = async (req: Request, res: Response) => {
                 count: found ? found.count : 0,
             };
         });
+
         return res.json(result);
     }
 
+       // WEEKLY (LAST 4 WEEKS – TODAY INCLUDED)
+
     if (range === "weekly") {
         const start = new Date();
-        start.setDate(start.getDate() - 28);
+        start.setDate(start.getDate() - 27); // last 28 days
+        start.setHours(0, 0, 0, 0);
 
-        const raw = await Anomaly.aggregate([
-            { $match: { detectedAt: { $gte: start } } },
-            {
-                $group: {
-                    _id: { week: { $week: "$detectedAt" } },
-                    count: { $sum: 1 },
-                },
-            },
-        ]);
+        const anomalies = await Anomaly.find({
+            detectedAt: { $gte: start },
+        });
 
-        const currentWeek = getWeekNumber(now);
+        const result = [
+            { label: "Week 1", count: 0 }, // 22–28 days ago
+            { label: "Week 2", count: 0 }, // 15–21 days ago
+            { label: "Week 3", count: 0 }, // 8–14 days ago
+            { label: "Week 4", count: 0 }, // last 7 days (TODAY)
+        ];
 
-        const result = Array.from({ length: 4 }, (_, i) => {
-            const week = currentWeek - (3 - i);
-            const found = raw.find(r => r._id.week === week);
+        anomalies.forEach((a) => {
+            const diffDays = Math.floor(
+                (now.getTime() - a.detectedAt.getTime()) /
+                (1000 * 60 * 60 * 24)
+            );
 
-            return {
-                label: `Week ${i + 1}`,
-                count: found ? found.count : 0,
-            };
+            if (diffDays <= 6) result[3].count++;        // TODAY
+            else if (diffDays <= 13) result[2].count++;
+            else if (diffDays <= 20) result[1].count++;
+            else if (diffDays <= 27) result[0].count++;
         });
 
         return res.json(result);

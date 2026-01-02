@@ -20,8 +20,8 @@
 
 
 import cron from "node-cron";
-import { syncEnergyGenerationRecords } from "../application/background/sync-energy-generation-records";
-import { generateMonthlyInvoices } from "../application/background/generate-invoices";
+import { syncEnergyGenerationRecords } from "../../application/background/sync-energy-generation-records";
+import { generateMonthlyInvoices } from "../../application/background/generate-invoices";
 
 export const initializeScheduler = () => {
 
@@ -46,38 +46,27 @@ export const initializeScheduler = () => {
                     error
                 );
             }
-        },
-        {
-            timezone: "Asia/Colombo",
-        }
-    );
-
+        });
     // 🧾 Monthly Invoice Generation
     const invoiceSchedule =
-        process.env.INVOICE_CRON_SCHEDULE || "1 0 1 * *";
+        process.env.INVOICE_CRON_SCHEDULE || "0 1 * * *";
 
-    cron.schedule(
-        invoiceSchedule,
-        async () => {
+    cron.schedule(invoiceSchedule, async () => {
+        console.log(
+            `[${new Date().toISOString()}] Starting invoice generation...`
+        );
+        try {
+            await generateMonthlyInvoices();
             console.log(
-                `[${new Date().toISOString()}]Starting monthly invoice generation...`
+                `[${new Date().toISOString()}] Invoice job finished`
             );
-            try {
-                await generateMonthlyInvoices();
-                console.log(
-                    `[${new Date().toISOString()}]Monthly invoices generated`
-                );
-            } catch (error) {
-                console.error(
-                    `[${new Date().toISOString()}]Invoice generation failed`,
-                    error
-                );
-            }
-        },
-        {
-            timezone: "Asia/Colombo",
+        } catch (error) {
+            console.error(
+                `[${new Date().toISOString()}] Invoice job failed`,
+                error
+            );
         }
-    );
+    });
 
     console.log("⏰ Scheduler initialized");
     console.log(`🔄 Energy Sync: ${syncSchedule}`);

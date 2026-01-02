@@ -9,6 +9,7 @@ export const getCurrentWeather = async (
     next: NextFunction
 ) => {
     try {
+        console.log("Received request for current weather with query:");
         const result = GetCurrentWeatherQueryDto.safeParse(req.query);
 
         if (!result.success) {
@@ -23,6 +24,8 @@ export const getCurrentWeather = async (
         );
 
         const current = data.current_weather;
+
+        console.log(current)
 
         res.status(200).json({
             temperature: current.temperature,

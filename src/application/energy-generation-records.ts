@@ -62,7 +62,7 @@ export const getAllEnergyGenerationRecordsBySolarUnitId = async (
             // res.status(200).json(energyGenerationRecords.slice(0, parseInt(limit)));
             return res.status(200).json(
                 energyGenerationRecords.slice(0, parsedLimit)
-            );
+            );//7 days kwh returned.
         }
     }catch (error) {
         next(error);
