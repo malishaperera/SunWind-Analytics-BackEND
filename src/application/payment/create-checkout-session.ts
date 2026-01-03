@@ -14,7 +14,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
         return res.status(404).json({ message: "Invoice not found" });
     }
 
-    if (invoice.paymentStatus === "PAID") {
+        if (invoice.paymentStatus === "PAID") {
         return res.status(400).json({ message: "Invoice already paid" });
     }
 
@@ -27,7 +27,8 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
                 quantity: Math.round(invoice.totalEnergyGenerated),
             },
         ],
-        return_url: `${process.env.FRONTEND_URL}/dashboard/invoices/complete?session_id={CHECKOUT_SESSION_ID}`,
+        return_url: `${process.env.FRONTEND_URL}/dashboard/invoices/complete?invoiceId=${invoice._id}`,
+
         metadata: {
             invoiceId: invoice._id.toString(),
         },
@@ -35,3 +36,4 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
 
     res.json({ clientSecret: session.client_secret });
 };
+// return_url: `${process.env.FRONTEND_URL}/dashboard/invoices/complete?session_id={CHECKOUT_SESSION_ID}`,
