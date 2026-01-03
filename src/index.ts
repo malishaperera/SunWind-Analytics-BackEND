@@ -21,13 +21,12 @@ server.use(
     cors({
         origin: [
             "http://localhost:5173",
-            "https://sunwind-analytics-frontends.netlify.app/",
-
+            "https://sunwind-analytics-frontend.netlify.app",
         ],
         credentials: true,
     })
 );
-// "https://sunwind-analytics-frontend.netlify.app",
+
 server.use(loggerMiddleware);
 
 server.post(
@@ -37,7 +36,6 @@ server.post(
 );
 
 server.use(clerkMiddleware())
-// server.use("/api/stripe/webhook", stripeWebhookRouter);
 server.use(express.json());
 
 server.use("/api/weather", weatherRouter);
