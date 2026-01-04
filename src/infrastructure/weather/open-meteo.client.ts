@@ -14,6 +14,5 @@ export const fetchCurrentWeather = async (
             },
         }
     );
-
     return response.data;
 };

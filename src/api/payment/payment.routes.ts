@@ -2,7 +2,6 @@ import express from "express";
 import {authenticationMiddleware} from "../middlewares/authentication-middleware";
 import {createCheckoutSession} from "../../application/payment/create-checkout-session";
 
-
 const payment_webhook = express.Router();
 
 // Create Stripe Checkout Session

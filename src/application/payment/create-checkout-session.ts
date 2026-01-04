@@ -36,4 +36,3 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
 
     res.json({ clientSecret: session.client_secret });
 };
-// return_url: `${process.env.FRONTEND_URL}/dashboard/invoices/complete?session_id={CHECKOUT_SESSION_ID}`,
