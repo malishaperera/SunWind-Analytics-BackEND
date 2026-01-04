@@ -40,15 +40,13 @@ This service is responsible for:
 
 The backend is structured using **Clean Architecture**, separating business logic from frameworks and external services.
 
-┌────────────────────────────┐
-│ Presentation │ → Express routes, controllers
-├────────────────────────────┤
-│ Application │ → Use cases, services, workflows
-├────────────────────────────┤
-│ Domain │ → Core entities & business rules
-├────────────────────────────┤
-│ Infrastructure │ → DB, Stripe, APIs, schedulers
-└────────────────────────────┘
+| Layer | Responsibility |
+|------|---------------|
+| **Presentation Layer** | Handles HTTP requests, Express routes, controllers, and request validation |
+| **Application Layer** | Contains use cases, business workflows, and application services |
+| **Domain Layer** | Defines core business entities and domain rules |
+| **Infrastructure Layer** | Implements database access, Stripe integration, external APIs, and schedulers |
+
 
 
 ### Architectural Benefits
