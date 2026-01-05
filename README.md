@@ -18,6 +18,9 @@ The system is built using **TypeScript** and follows **Clean Architecture princi
 - **Frontend Application**  
   https://sunwind-analytics-frontend.netlify.app
 
+- **Frontend Repository**  
+  https://github.com/malishaperera/SunWind-Analytics-FRONTEND
+
 ---
 
 ## 🎯 Backend Responsibilities
