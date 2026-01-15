@@ -23,18 +23,28 @@ export const getAnomalies = async (
         }
 
         // Find user's solar units
+        // const solarUnits = await SolarUnit.find({ userId: user._id });
+        // const solarUnitIds = solarUnits.map((s) => s._id);
+        //
+        // // TODAY START
+        // const startOfToday = new Date();
+        // startOfToday.setHours(0, 0, 0, 0);
+        //
+        // // Fetch TODAY anomalies ONLY
+        // const anomalies = await Anomaly.find({
+        //     solarUnitId: { $in: solarUnitIds },
+        //     detectedAt: { $gte: startOfToday },
+        // }).sort({ detectedAt: -1 });
+
+
         const solarUnits = await SolarUnit.find({ userId: user._id });
         const solarUnitIds = solarUnits.map((s) => s._id);
 
-        // TODAY START
-        const startOfToday = new Date();
-        startOfToday.setHours(0, 0, 0, 0);
-
-        // Fetch TODAY anomalies ONLY
+        // FETCH ALL ANOMALIES (NO DATE FILTER)
         const anomalies = await Anomaly.find({
             solarUnitId: { $in: solarUnitIds },
-            detectedAt: { $gte: startOfToday },
         }).sort({ detectedAt: -1 });
+
 
         res.status(200).json(anomalies);
     } catch (error) {
