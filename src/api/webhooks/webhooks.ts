@@ -6,6 +6,7 @@ const webhooksRouter = express.Router();
 webhooksRouter.post(
     '/clerk', express.raw({ type: 'application/json' }), async (req, res) => {
     try {
+        console.log('Received Clerk webhook')
         const evt = await verifyWebhook(req)
 
         // Do something with payload

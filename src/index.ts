@@ -14,6 +14,7 @@ import anomalyRouter from "./api/anomaly/anomaly.routes";
 import invoiceRouter from "./api/invoice/invoice.routes";
 import paymentRoutes from "./api/payment/payment.routes";
 import {handleStripeWebhook} from "./api/webhooks/stripe.webhook";
+import webhooksRouter from "./api/webhooks/webhooks";
 
 const server = express();
 
@@ -35,9 +36,10 @@ server.post(
     handleStripeWebhook
 );
 
-server.use(clerkMiddleware())
-server.use(express.json());
+server.use("/api/webhooks", webhooksRouter);
 
+server.use(express.json());
+server.use(clerkMiddleware())
 server.use("/api/weather", weatherRouter);
 server.use("/api/solar-units", solarUnitRouter);
 server.use("/api/energy-generation-records", energyGenerationRecordRouter);
